@@ -75,7 +75,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Authors
 
-- Your Name - *Initial work* - [Your GitHub Username](https://github.com/your-username)
+- Kushan Laksitha - *Initial work* - [KushanLaksitha](https://github.com/KushanLaksitha)
 
 ## 🙏 Acknowledgments
 
@@ -86,8 +86,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact
 
-- Email: your.email@example.com
-- Project Link: https://github.com/your-username/sl-transport
+- Email: kushanlaksitha32@gmail.com
+- Project Link: https://github.com/KushanLaksitha/sl-transport
 
 ## 🔮 Future Enhancements
 
