@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routes - Sri Lankan Transport Services</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+
+    <style>
+        .route-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                        url('https://www-sygic.akamaized.net/content/14-blog/0-2018/20181108-web-route-planner-plan-your-routes-in-smarter-ways/ppc-952_sg_web_route_planner_imgs_960x509px_final.png') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 60px 0;
+            position: relative;
+        }
+
+        .route-filter {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .route-card {
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .route-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .map-container {
+            height: 600px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .route-details {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #0d6efd;
+            margin-bottom: 1rem;
+        }
+
+        .schedule-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .schedule-table th {
+            background: #f8f9fa;
+        }
+
+        .route-type-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .stop-point {
+            padding: 10px;
+            border-left: 2px solid #0d6efd;
+            margin-bottom: 10px;
+        }
+
+        .favorite-route {
+            color: #ffc107;
+            cursor: pointer;
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+                /* Modern Header Styles */
+                .navbar {
+                    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%) !important;
+                    padding: 1rem 0;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease;
+                }
+        
+                .navbar-brand {
+                    display: flex;
+                    align-items: center;
+                    font-weight: 600;
+                    font-size: 1.5rem;
+                    color: white !important;
+                    transition: all 0.3s ease;
+                }
+        
+                .navbar-brand img {
+                    height: 45px;
+                    margin-right: 12px;
+                    transition: transform 0.3s ease;
+                }
+        
+                .navbar-brand:hover img {
+                    transform: scale(1.05);
+                }
+        
+                .nav-link {
+                    color: rgba(255, 255, 255, 0.9) !important;
+                    font-weight: 500;
+                    padding: 0.5rem 1rem !important;
+                    margin: 0 0.2rem;
+                    border-radius: 5px;
+                    transition: all 0.3s ease;
+                }
+        
+                .nav-link:hover {
+                    color: white !important;
+                    background-color: rgba(255, 255, 255, 0.1);
+                    transform: translateY(-1px);
+                }
+        
+                .nav-link.active {
+                    color: white !important;
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
+        
+                .navbar-toggler {
+                    border: none;
+                    padding: 0.5rem;
+                }
+        
+                .navbar-toggler:focus {
+                    box-shadow: none;
+                    outline: none;
+                }
+        
+                .btn-outline-light {
+                    border-width: 2px;
+                    font-weight: 500;
+                    padding: 0.5rem 1.5rem;
+                    transition: all 0.3s ease;
+                }
+        
+                .btn-outline-light:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+        
+                .btn-light {
+                    font-weight: 500;
+                    padding: 0.5rem 1.5rem;
+                    transition: all 0.3s ease;
+                }
+        
+                .btn-light:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+        
+                /* Sticky Header Effect */
+                .navbar.sticky {
+                    background: rgba(26, 35, 126, 0.95) !important;
+                    backdrop-filter: blur(10px);
+                    padding: 0.8rem 0;
+                }
+        
+                /* Responsive Adjustments */
+                @media (max-width: 991px) {
+                    .navbar-collapse {
+                        background: rgba(26, 35, 126, 0.98);
+                        padding: 1rem;
+                        border-radius: 10px;
+                        margin-top: 1rem;
+                    }
+                    
+                    .nav-link {
+                        padding: 0.8rem 1rem !important;
+                        margin: 0.2rem 0;
+                    }
+                    
+                    .navbar-nav .btn {
+                        margin: 0.5rem 0;
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="https://static.vecteezy.com/system/resources/previews/043/212/163/non_2x/a-bus-is-seen-driving-down-a-road-that-runs-alongside-a-lush-green-field-a-clean-minimalist-design-for-a-public-transportation-company-free-vector.jpg" alt="SL Transport Logo" class="d-inline-block align-text-top">
+                SL Transport
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="live-tracking.html">Live Tracking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="book-tickets.html">Book Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="routes.html">Routes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="updates.html">Updates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="support.html">Support</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="login.html" class="btn btn-outline-light me-2">Login</a>
+                    <a href="register.html" class="btn btn-light">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    
+    <!-- Route Hero Section -->
+    <section class="route-section">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Route Planner</h1>
+            <p class="lead">Find the best routes for your journey across Sri Lanka</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="py-5">
+        <div class="container">
+            <!-- Route Filter -->
+            <div class="route-filter">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">From</label>
+                        <select class="form-select" id="fromLocation">
+                            <option value="">Select departure</option>
+                            <option value="colombo">Colombo</option>
+                            <option value="kandy">Kandy</option>
+                            <option value="galle">Galle</option>
+                            <option value="jaffna">Jaffna</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">To</label>
+                        <select class="form-select" id="toLocation">
+                            <option value="">Select destination</option>
+                            <option value="colombo">Colombo</option>
+                            <option value="kandy">Kandy</option>
+                            <option value="galle">Galle</option>
+                            <option value="jaffna">Jaffna</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Transport Type</label>
+                        <select class="form-select" id="transportType">
+                            <option value="all">All Types</option>
+                            <option value="bus">Bus</option>
+                            <option value="train">Train</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Sort By</label>
+                        <select class="form-select" id="sortBy">
+                            <option value="duration">Duration</option>
+                            <option value="price">Price</option>
+                            <option value="departure">Departure Time</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Route List -->
+                <div class="col-lg-4">
+                    <div class="route-details">
+                        <div class="card route-card">
+                            <div class="card-body">
+                                <span class="badge bg-primary route-type-badge">Express Bus</span>
+                                <h5 class="card-title">Colombo - Kandy</h5>
+                                <p class="card-text">
+                                    <i class="fas fa-clock me-2"></i>Duration: 3h 30m<br>
+                                    <i class="fas fa-money-bill me-2"></i>Fare: LKR 750<br>
+                                    <i class="fas fa-route me-2"></i>Distance: 115 km
+                                </p>
+                                <div class="stop-point">
+                                    <small class="text-muted">Via: Kadawatha, Nittambuwa, Kegalle</small>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <i class="fas fa-star favorite-route"></i>
+                                    <button class="btn btn-primary">View Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card route-card">
+                            <div class="card-body">
+                                <span class="badge bg-info route-type-badge">Train</span>
+                                <h5 class="card-title">Colombo - Kandy</h5>
+                                <p class="card-text">
+                                    <i class="fas fa-clock me-2"></i>Duration: 2h 45m<br>
+                                    <i class="fas fa-money-bill me-2"></i>Fare: LKR 400<br>
+                                    <i class="fas fa-route me-2"></i>Distance: 120 km
+                                </p>
+                                <div class="stop-point">
+                                    <small class="text-muted">Via: Ragama, Gampaha, Polgahawela</small>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <i class="far fa-star favorite-route"></i>
+                                    <button class="btn btn-primary">View Schedule</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Section -->
+                
+                <div class="map-container" id="routeMap"></div>
+            </div>
+
+            <!-- Schedule Section -->
+            <div class="mt-5">
+                <h3 class="mb-4">Today's Schedule</h3>
+                <div class="table-responsive schedule-table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Route</th>
+                                <th>Type</th>
+                                <th>Departure</th>
+                                <th>Arrival</th>
+                                <th>Available Seats</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Colombo - Kandy</td>
+                                <td>Express Bus</td>
+                                <td>08:00 AM</td>
+                                <td>11:30 AM</td>
+                                <td>25</td>
+                                <td><span class="badge bg-success">On Time</span></td>
+                                <td><button class="btn btn-sm btn-primary">Book</button></td>
+                            </tr>
+                            <tr>
+                                <td>Colombo - Kandy</td>
+                                <td>Train</td>
+                                <td>09:30 AM</td>
+                                <td>12:15 PM</td>
+                                <td>45</td>
+                                <td><span class="badge bg-warning">Delayed</span></td>
+                                <td><button class="btn btn-sm btn-primary">Book</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-clock feature-icon"></i>
+                    <h4>Real-time Updates</h4>
+                    <p>Get live updates on route changes and delays</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-map-marked-alt feature-icon"></i>
+                    <h4>Interactive Maps</h4>
+                    <p>View detailed route maps with all stops</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-star feature-icon"></i>
+                    <h4>Save Favorites</h4>
+                    <p>Bookmark your frequent routes for quick access</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>Transforming Sri Lanka's public transportation through digital innovation.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">Privacy Policy</a></li>
+                        <li><a href="#" class="text-light">Terms of Service</a></li>
+                        <li><a href="#" class="text-light">Contact Us</a></li>
+                        <li><a href="#" class="text-light">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 SL Transport. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script>
+        // Constants
+const API_BASE_URL = '/api';
+
+// Initialize map
+let map = null;
+let currentRoute = null;
+let markers = [];
+
+function initializeMap() {
+    map = L.map('routeMap').setView([7.8731, 80.7718], 7);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+}
+
+// Clear existing markers and routes
+function clearMap() {
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+    if (currentRoute) {
+        map.removeLayer(currentRoute);
+    }
+}
+
+// Draw route on map
+function drawRoute(coordinates) {
+    clearMap();
+    
+    currentRoute = L.polyline(coordinates, {
+        color: '#0d6efd',
+        weight: 4,
+        opacity: 0.7
+    }).addTo(map);
+    
+    // Add markers for start and end points
+    coordinates.forEach((coord, index) => {
+        const marker = L.marker(coord).addTo(map);
+        if (index === 0) {
+            marker.bindPopup('Start');
+        } else if (index === coordinates.length - 1) {
+            marker.bindPopup('End');
+        }
+        markers.push(marker);
+    });
+    
+    map.fitBounds(currentRoute.getBounds());
+}
+
+// Filter routes
+async function filterRoutes() {
+    const from = document.getElementById('fromLocation').value;
+    const to = document.getElementById('toLocation').value;
+    const type = document.getElementById('transportType').value;
+    const sort = document.getElementById('sortBy').value;
+    
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/route.php?action=search&from=${from}&to=${to}&type=${type}&sort=${sort}`
+        );
+        const data = await response.json();
+        
+        if (data.status === 'success') {
+            updateRoutesList(data.data);
+        } else {
+            console.error('Error fetching routes:', data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Update routes list
+function updateRoutesList(routes) {
+    const routeDetails = document.querySelector('.route-details');
+    routeDetails.innerHTML = '';
+    
+    routes.forEach(route => {
+        const card = createRouteCard(route);
+        routeDetails.appendChild(card);
+    });
+}
+
+// Create route card
+function createRouteCard(route) {
+    const card = document.createElement('div');
+    card.className = 'card route-card';
+    card.innerHTML = `
+        <div class="card-body">
+            <span class="badge bg-primary route-type-badge">${route.vehicle_type}</span>
+            <h5 class="card-title">${route.route_name}</h5>
+            <p class="card-text">
+                <i class="fas fa-clock me-2"></i>Duration: ${route.estimated_duration_minutes}m<br>
+                <i class="fas fa-money-bill me-2"></i>Fare: LKR ${route.base_fare}<br>
+                <i class="fas fa-route me-2"></i>Distance: ${route.distance_km} km
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+                <i class="far fa-star favorite-route"></i>
+                <button class="btn btn-primary" onclick="viewRoute(${route.route_id})">View Schedule</button>
+            </div>
+        </div>
+    `;
+    return card;
+}
+
+// View route details and schedule
+async function viewRoute(routeId) {
+    try {
+        const [stopsResponse, scheduleResponse] = await Promise.all([
+            fetch(`${API_BASE_URL}/route.php?action=stops&route_id=${routeId}`),
+            fetch(`${API_BASE_URL}/route.php?action=schedule&route_id=${routeId}`)
+        ]);
+        
+        const stopsData = await stopsResponse.json();
+        const scheduleData = await scheduleResponse.json();
+        
+        if (stopsData.status === 'success') {
+            const coordinates = stopsData.data.map(stop => [
+                parseFloat(stop.latitude),
+                parseFloat(stop.longitude)
+            ]);
+            drawRoute(coordinates);
+        }
+        
+        if (scheduleData.status === 'success') {
+            updateScheduleTable(scheduleData.data);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Update schedule table
+function updateScheduleTable(schedules) {
+    const tableBody = document.querySelector('.schedule-table tbody');
+    tableBody.innerHTML = '';
+    
+    schedules.forEach(schedule => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${schedule.route_name}</td>
+            <td>${schedule.vehicle_type}</td>
+            <td>${schedule.departure_time}</td>
+            <td>${schedule.arrival_time}</td>
+            <td>${schedule.available_seats}</td>
+            <td><span class="badge bg-success">On Time</span></td>
+            <td><button class="btn btn-sm btn-primary" onclick="window.location.href='book-tickets.html'">Book</button></td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// Initialize components
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMap();
+    filterRoutes();
+    
+    // Add event listeners
+    document.querySelectorAll('.route-filter select').forEach(select => {
+        select.addEventListener('change', filterRoutes);
+    });
+});
+
+// Handle sticky navbar
+window.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        navbar.classList.add('sticky');
+    } else {
+        navbar.classList.remove('sticky');
+    }
+});
+    </script>
+</body>
+</html>

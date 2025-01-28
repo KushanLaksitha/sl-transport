@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Vehicle Tracking - SL Transport</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" rel="stylesheet">
+    <style>
+        #map {
+            height: calc(100vh - 200px);
+            min-height: 500px;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .vehicle-list {
+            height: calc(100vh - 200px);
+            min-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .vehicle-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .vehicle-item:hover {
+            background-color: #f8f9fa;
+            border-left-color: #0d6efd;
+        }
+
+        .vehicle-item.active {
+            background-color: #e9ecef;
+            border-left-color: #0d6efd;
+        }
+        
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .status-on-time {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-delayed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-arriving {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .quick-stats {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 10px;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .stat-card:last-child {
+            border-right: none;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+                /* Modern Header Styles */
+                .navbar {
+                    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%) !important;
+                    padding: 1rem 0;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease;
+                }
+        
+                .navbar-brand {
+                    display: flex;
+                    align-items: center;
+                    font-weight: 600;
+                    font-size: 1.5rem;
+                    color: white !important;
+                    transition: all 0.3s ease;
+                }
+        
+                .navbar-brand img {
+                    height: 45px;
+                    margin-right: 12px;
+                    transition: transform 0.3s ease;
+                }
+        
+                .navbar-brand:hover img {
+                    transform: scale(1.05);
+                }
+        
+                .nav-link {
+                    color: rgba(255, 255, 255, 0.9) !important;
+                    font-weight: 500;
+                    padding: 0.5rem 1rem !important;
+                    margin: 0 0.2rem;
+                    border-radius: 5px;
+                    transition: all 0.3s ease;
+                }
+        
+                .nav-link:hover {
+                    color: white !important;
+                    background-color: rgba(255, 255, 255, 0.1);
+                    transform: translateY(-1px);
+                }
+        
+                .nav-link.active {
+                    color: white !important;
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
+        
+                .navbar-toggler {
+                    border: none;
+                    padding: 0.5rem;
+                }
+        
+                .navbar-toggler:focus {
+                    box-shadow: none;
+                    outline: none;
+                }
+        
+                .btn-outline-light {
+                    border-width: 2px;
+                    font-weight: 500;
+                    padding: 0.5rem 1.5rem;
+                    transition: all 0.3s ease;
+                }
+        
+                .btn-outline-light:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+        
+                .btn-light {
+                    font-weight: 500;
+                    padding: 0.5rem 1.5rem;
+                    transition: all 0.3s ease;
+                }
+        
+                .btn-light:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+        
+                /* Sticky Header Effect */
+                .navbar.sticky {
+                    background: rgba(26, 35, 126, 0.95) !important;
+                    backdrop-filter: blur(10px);
+                    padding: 0.8rem 0;
+                }
+        
+                /* Responsive Adjustments */
+                @media (max-width: 991px) {
+                    .navbar-collapse {
+                        background: rgba(26, 35, 126, 0.98);
+                        padding: 1rem;
+                        border-radius: 10px;
+                        margin-top: 1rem;
+                    }
+                    
+                    .nav-link {
+                        padding: 0.8rem 1rem !important;
+                        margin: 0.2rem 0;
+                    }
+                    
+                    .navbar-nav .btn {
+                        margin: 0.5rem 0;
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="https://static.vecteezy.com/system/resources/previews/043/212/163/non_2x/a-bus-is-seen-driving-down-a-road-that-runs-alongside-a-lush-green-field-a-clean-minimalist-design-for-a-public-transportation-company-free-vector.jpg" alt="SL Transport Logo" class="d-inline-block align-text-top me-2">
+                SL Transport
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="live-tracking.html">Live Tracking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="book-tickets.html">Book Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="routes.html">Routes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="updates.html">Updates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="support.html">Support</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="login.html" class="btn btn-outline-light me-2">Login</a>
+                    <a href="register.html" class="btn btn-light">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value" id="activeVehicles">45</div>
+                        <div class="stat-label">Active Vehicles</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value" id="onTimePercentage">92%</div>
+                        <div class="stat-label">On Time</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value" id="activeRoutes">12</div>
+                        <div class="stat-label">Active Routes</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalPassengers">2.5K</div>
+                        <div class="stat-label">Current Passengers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <select class="form-select" id="vehicleType">
+                        <option value="all">All Vehicles</option>
+                        <option value="bus">Buses</option>
+                        <option value="train">Trains</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="routeSelect">
+                        <option value="">Select Route</option>
+                        <option value="138">138 - Pettah to Kadawatha</option>
+                        <option value="100">100 - Colombo to Galle</option>
+                        <option value="177">177 - Kaduwela to Kollupitiya</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search vehicle or route">
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="on-time">On Time</option>
+                        <option value="delayed">Delayed</option>
+                        <option value="arriving">Arriving Soon</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" id="refreshBtn">
+                        <i class="fas fa-sync-alt me-2"></i> Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Vehicle List -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Active Vehicles</h5>
+                            <span class="badge bg-primary" id="vehicleCount">0</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-0 vehicle-list" id="vehicleList">
+                        <!-- Vehicle items will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Section -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div id="map"></div>
+                        <!-- Map Legend -->
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #28a745;"></div>
+                                <span>On Time</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #dc3545;"></div>
+                                <span>Delayed</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #007bff;"></div>
+                                <span>Arriving Soon</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>Transforming Sri Lanka's public transportation through digital innovation.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">Privacy Policy</a></li>
+                        <li><a href="#" class="text-light">Terms of Service</a></li>
+                        <li><a href="#" class="text-light">Contact Us</a></li>
+                        <li><a href="#" class="text-light">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 SL Transport. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([6.9271, 79.8612], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        
+        // Vehicle markers
+        const markers = {};
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'on-time': return 'status-on-time';
+                case 'delayed': return 'status-delayed';
+                case 'arriving': return 'status-arriving';
+                default: return 'status-on-time';
+            }
+        }
+
+        function getStatusText(status) {
+            switch(status) {
+                case 'on-time': return 'On Time';
+                case 'delayed': return 'Delayed';
+                case 'arriving': return 'Arriving';
+                default: return status;
+            }
+        }
+
+        function createVehicleMarker(vehicle) {
+            const markerColor = vehicle.status === 'on-time' ? '#28a745' : 
+                               vehicle.status === 'delayed' ? '#dc3545' : '#007bff';
+            
+            const markerIcon = L.divIcon({
+                html: `<i class="fas fa-${vehicle.type === 'bus' ? 'bus' : 'train'}" style="color: ${markerColor}; font-size: 24px;"></i>`,
+                className: 'vehicle-marker',
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            });
+
+            return L.marker([vehicle.lat, vehicle.lng], { icon: markerIcon });
+        }
+
+        function updateVehicleList() {
+            const vehicleList = document.getElementById('vehicleList');
+            vehicleList.innerHTML = '';
+            document.getElementById('vehicleCount').textContent = vehicles.length;
+
+            vehicles.forEach(vehicle => {
+                const item = document.createElement('div');
+                item.className = 'list-group-item vehicle-item';
+                item.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-1">
+                                    <i class="fas fa-${vehicle.type === 'bus' ? 'bus' : 'train'} me-2"></i>
+                                    ${vehicle.number}
+                                </h6>
+                                <span class="status-badge ${getStatusClass(vehicle.status)}">
+                                    ${getStatusText(vehicle.status)}
+                                </span>
+                            </div>
+                            <p class="mb-1 text-muted">Route ${vehicle.route}: ${vehicle.routeName}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i> ${vehicle.lastUpdate}
+                                </small>
+                                <small class="text-muted">
+                                    <i class="fas fa-tachometer-alt me-1"></i> ${vehicle.speed}
+                                </small>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-map-marker-alt me-1"></i> Next: ${vehicle.nextStop}
+                                </small>
+                                <div class="progress mt-1" style="height: 4px;">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: ${vehicle.capacity};" 
+                                         aria-valuenow="${parseInt(vehicle.capacity)}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                item.addEventListener('click', () => {
+                    // Remove active class from all items
+                    document.querySelectorAll('.vehicle-item').forEach(el => {
+                        el.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked item
+                    item.classList.add('active');
+                    
+                    // Center map on vehicle
+                    map.setView([vehicle.lat, vehicle.lng], 15);
+                    markers[vehicle.id].openPopup();
+                });
+
+                vehicleList.appendChild(item);
+            });
+        }
+
+        function createPopupContent(vehicle) {
+            return `
+                <div class="popup-content">
+                    <h6 class="mb-2">${vehicle.number} - ${vehicle.route}</h6>
+                    <p class="mb-1"><strong>Route:</strong> ${vehicle.routeName}</p>
+                    <p class="mb-1"><strong>Status:</strong> ${getStatusText(vehicle.status)}</p>
+                    <p class="mb-1"><strong>Speed:</strong> ${vehicle.speed}</p>
+                    <p class="mb-1"><strong>Next Stop:</strong> ${vehicle.nextStop}</p>
+                    <p class="mb-1"><strong>Capacity:</strong> ${vehicle.capacity}</p>
+                    <p class="mb-0"><small>Last updated: ${vehicle.lastUpdate}</small></p>
+                </div>
+            `;
+        }
+
+        function updateMap() {
+            vehicles.forEach(vehicle => {
+                if (markers[vehicle.id]) {
+                    markers[vehicle.id].setLatLng([vehicle.lat, vehicle.lng]);
+                    markers[vehicle.id].getPopup().setContent(createPopupContent(vehicle));
+                } else {
+                    const marker = createVehicleMarker(vehicle)
+                        .bindPopup(createPopupContent(vehicle));
+                    markers[vehicle.id] = marker;
+                    marker.addTo(map);
+                }
+            });
+        }
+
+        function filterVehicles() {
+            const vehicleType = document.getElementById('vehicleType').value;
+            const route = document.getElementById('routeSelect').value;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value;
+
+            return vehicles.filter(vehicle => {
+                const matchType = vehicleType === 'all' || vehicle.type === vehicleType;
+                const matchRoute = !route || vehicle.route === route;
+                const matchSearch = !search || 
+                    vehicle.number.toLowerCase().includes(search) || 
+                    vehicle.routeName.toLowerCase().includes(search);
+                const matchStatus = status === 'all' || vehicle.status === status;
+
+                return matchType && matchRoute && matchSearch && matchStatus;
+            });
+        }
+
+        function updateStats() {
+            const activeVehicles = vehicles.length;
+            const onTimeVehicles = vehicles.filter(v => v.status === 'on-time').length;
+            const onTimePercentage = Math.round((onTimeVehicles / activeVehicles) * 100);
+            const activeRoutes = new Set(vehicles.map(v => v.route)).size;
+            const totalPassengers = vehicles.reduce((sum, v) => {
+                return sum + Math.round(parseInt(v.capacity) * 0.4); // Assuming 40 seats average
+            }, 0);
+
+            document.getElementById('activeVehicles').textContent = activeVehicles;
+            document.getElementById('onTimePercentage').textContent = `${onTimePercentage}%`;
+            document.getElementById('activeRoutes').textContent = activeRoutes;
+            document.getElementById('totalPassengers').textContent = 
+                totalPassengers > 1000 ? `${(totalPassengers/1000).toFixed(1)}K` : totalPassengers;
+        }
+
+        // Event Listeners
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            // In a real application, this would fetch new data from the server
+            updateVehicleList();
+            updateMap();
+            updateStats();
+        });
+
+        ['vehicleType', 'routeSelect', 'statusFilter'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                const filteredVehicles = filterVehicles();
+                updateVehicleList(filteredVehicles);
+                updateMap(filteredVehicles);
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', () => {
+            const filteredVehicles = filterVehicles();
+            updateVehicleList(filteredVehicles);
+            updateMap(filteredVehicles);
+        });
+
+        // Simulate real-time updates
+        function simulateVehicleMovement() {
+            vehicles.forEach(vehicle => {
+                // Simulate movement by slightly adjusting coordinates
+                vehicle.lat += (Math.random() - 0.5) * 0.001;
+                vehicle.lng += (Math.random() - 0.5) * 0.001;
+                
+                // Update last update time
+                vehicle.lastUpdate = 'Just now';
+            });
+
+            updateVehicleList();
+            updateMap();
+        }
+
+        // Initialize the view
+        updateVehicleList();
+        updateMap();
+        updateStats();
+
+        // Simulate real-time updates every 5 seconds
+        setInterval(simulateVehicleMovement, 5000);
+
+        // Add responsive behavior for map
+        window.addEventListener('resize', () => {
+            map.invalidateSize();
+        });
+
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('sticky');
+            } else {
+                navbar.classList.remove('sticky');
+            }
+        });
+        let vehicles = [];
+
+        // Add this function to fetch vehicles from the backend
+        async function fetchVehicles() {
+            try {
+                const response = await fetch('api/vehicles.php');
+                const data = await response.json();
+                vehicles = data;
+                updateVehicleList();
+                updateMap();
+                updateStats();
+            } catch (error) {
+                console.error('Error fetching vehicles:', error);
+            }
+        }
+
+        // Add this function to update vehicle location
+        async function updateVehicleLocation(vehicleId, lat, lng, speed) {
+            try {
+                const response = await fetch('api/update-location.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ vehicleId, lat, lng, speed })
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('Error updating vehicle location:', error);
+            }
+        }
+
+        // Modify the refreshBtn click handler
+        document.getElementById('refreshBtn').addEventListener('click', fetchVehicles);
+
+        // Replace simulateVehicleMovement with:
+        async function simulateVehicleMovement() {
+            vehicles.forEach(async (vehicle) => {
+                const newLat = vehicle.lat + (Math.random() - 0.5) * 0.001;
+                const newLng = vehicle.lng + (Math.random() - 0.5) * 0.001;
+                const newSpeed = Math.round(Math.random() * 20 + 30); // Random speed between 30-50 km/h
+                
+                await updateVehicleLocation(vehicle.id, newLat, newLng, newSpeed);
+            });
+            
+            fetchVehicles(); // Fetch updated data from server
+        }
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', fetchVehicles);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest Updates - SL Transport Services</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%) !important;
+        }
+
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://media.prokurio.com/wp-content/uploads/2023/12/08152106/Latest-Updates.jpg') center/cover;
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 40px;
+        }
+
+        .news-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-card img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .filter-btn {
+            border-radius: 20px;
+            padding: 8px 20px;
+            margin: 0 5px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background-color: #1a237e;
+            color: white;
+        }
+
+        .search-box {
+            border-radius: 25px;
+            padding: 10px 20px;
+            border: 2px solid #eee;
+        }
+
+        .pagination .page-link {
+            border-radius: 50%;
+            margin: 0 5px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .news-meta i {
+            color: #1a237e;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-buttons a {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .share-buttons a:hover {
+            transform: scale(1.1);
+        }
+
+        .facebook { background-color: #3b5998; }
+        .twitter { background-color: #1da1f2; }
+        .linkedin { background-color: #0077b5; }
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .app-download {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                        url('/api/placeholder/1920/600') center/cover;
+            color: white;
+            padding: 60px 0;
+        }
+                /* Modern Header Styles */
+        .navbar {
+            background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%) !important;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand img {
+            height: 45px;
+            margin-right: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            margin: 0 0.2rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .btn-outline-light {
+            border-width: 2px;
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-light:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-light {
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-light:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Sticky Header Effect */
+        .navbar.sticky {
+            background: rgba(26, 35, 126, 0.95) !important;
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 0;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: rgba(26, 35, 126, 0.98);
+                padding: 1rem;
+                border-radius: 10px;
+                margin-top: 1rem;
+            }
+            
+            .nav-link {
+                padding: 0.8rem 1rem !important;
+                margin: 0.2rem 0;
+            }
+            
+            .navbar-nav .btn {
+                margin: 0.5rem 0;
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar (Same as main page) -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="https://static.vecteezy.com/system/resources/previews/043/212/163/non_2x/a-bus-is-seen-driving-down-a-road-that-runs-alongside-a-lush-green-field-a-clean-minimalist-design-for-a-public-transportation-company-free-vector.jpg" alt="SL Transport Logo" class="d-inline-block align-text-top">
+                SL Transport
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="live-tracking.html">Live Tracking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="book-tickets.html">Book Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="routes.html">Routes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="updates.html">Updates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="support.html">Support</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="login.html" class="btn btn-outline-light me-2">Login</a>
+                    <a href="register.html" class="btn btn-light">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Latest Updates</h1>
+            <p class="lead">Stay informed about our latest news, service updates, and announcements</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Search and Filter Section -->
+        <div class="row mb-5">
+            <div class="col-md-6 mb-3">
+                <input type="text" class="form-control search-box" placeholder="Search updates...">
+            </div>
+            <div class="col-md-6 text-md-end mb-3">
+                <button class="btn filter-btn active">All</button>
+                <button class="btn filter-btn">Service Updates</button>
+                <button class="btn filter-btn">News</button>
+                <button class="btn filter-btn">Announcements</button>
+            </div>
+        </div>
+
+        <!-- News Grid -->
+        <div class="row">
+            <!-- News Item 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card news-card">
+                    <img src="/api/placeholder/400/200" class="card-img-top" alt="New Routes">
+                    <span class="category-badge bg-primary text-white">Service Update</span>
+                    <div class="card-body">
+                        <div class="news-meta">
+                            <span><i class="far fa-calendar"></i> Jan 25, 2025</span>
+                            <span><i class="far fa-eye"></i> 1.2K views</span>
+                        </div>
+                        <h5 class="card-title">New Routes Added to Network</h5>
+                        <p class="card-text">We're expanding our service network with 10 new routes across major cities to better serve our customers.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#" class="btn btn-outline-primary">Read More</a>
+                            <div class="share-buttons">
+                                <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Item 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card news-card">
+                    <img src="/api/placeholder/400/200" class="card-img-top" alt="Mobile App">
+                    <span class="category-badge bg-success text-white">News</span>
+                    <div class="card-body">
+                        <div class="news-meta">
+                            <span><i class="far fa-calendar"></i> Jan 23, 2025</span>
+                            <span><i class="far fa-eye"></i> 2.5K views</span>
+                        </div>
+                        <h5 class="card-title">Mobile App Launch</h5>
+                        <p class="card-text">Experience our new mobile app with enhanced features for real-time tracking and instant booking.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#" class="btn btn-outline-primary">Read More</a>
+                            <div class="share-buttons">
+                                <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Item 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card news-card">
+                    <img src="/api/placeholder/400/200" class="card-img-top" alt="Service Improvement">
+                    <span class="category-badge bg-warning text-dark">Announcement</span>
+                    <div class="card-body">
+                        <div class="news-meta">
+                            <span><i class="far fa-calendar"></i> Jan 20, 2025</span>
+                            <span><i class="far fa-eye"></i> 1.8K views</span>
+                        </div>
+                        <h5 class="card-title">Service Improvements</h5>
+                        <p class="card-text">We've enhanced our tracking accuracy and real-time updates for a better travel experience.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#" class="btn btn-outline-primary">Read More</a>
+                            <div class="share-buttons">
+                                <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional news items would follow the same pattern -->
+        </div>
+
+        <!-- Pagination -->
+        <nav class="my-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </main>
+
+    <!-- Footer (Same as main page) -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>Transforming Sri Lanka's public transportation through digital innovation.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">Privacy Policy</a></li>
+                        <li><a href="#" class="text-light">Terms of Service</a></li>
+                        <li><a href="#" class="text-light">Contact Us</a></li>
+                        <li><a href="#" class="text-light">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 SL Transport. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Filter buttons functionality
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                // Add filtering logic here
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-box').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            // Add search logic here
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Sri Lankan Transport Services</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+                        url('https://s7280.pcdn.co/wp-content/uploads/2019/04/it-support.jpg.optimal.jpg') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 60px 0;
+        }
+
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #0d6efd;
+            margin-bottom: 1rem;
+        }
+
+        
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+                /* Modern Header Styles */
+                .navbar {
+                    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%) !important;
+                    padding: 1rem 0;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease;
+                }
+        
+                .navbar-brand {
+                    display: flex;
+                    align-items: center;
+                    font-weight: 600;
+                    font-size: 1.5rem;
+                    color: white !important;
+                    transition: all 0.3s ease;
+                }
+        
+                .navbar-brand img {
+                    height: 45px;
+                    margin-right: 12px;
+                    transition: transform 0.3s ease;
+                }
+        
+                .navbar-brand:hover img {
+                    transform: scale(1.05);
+                }
+        
+                .nav-link {
+                    color: rgba(255, 255, 255, 0.9) !important;
+                    font-weight: 500;
+                    padding: 0.5rem 1rem !important;
+                    margin: 0 0.2rem;
+                    border-radius: 5px;
+                    transition: all 0.3s ease;
+                }
+        
+                .nav-link:hover {
+                    color: white !important;
+                    background-color: rgba(255, 255, 255, 0.1);
+                    transform: translateY(-1px);
+                }
+        
+                .nav-link.active {
+                    color: white !important;
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
+        
+                .navbar-toggler {
+                    border: none;
+                    padding: 0.5rem;
+                }
+        
+                .navbar-toggler:focus {
+                    box-shadow: none;
+                    outline: none;
+                }
+        
+                .btn-outline-light {
+                    border-width: 2px;
+                    font-weight: 500;
+                    padding: 0.5rem 1.5rem;
+                    transition: all 0.3s ease;
+                }
+        
+                .btn-outline-light:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+        
+                .btn-light {
+                    font-weight: 500;
+                    padding: 0.5rem 1.5rem;
+                    transition: all 0.3s ease;
+                }
+        
+                .btn-light:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                }
+        
+                /* Sticky Header Effect */
+                .navbar.sticky {
+                    background: rgba(26, 35, 126, 0.95) !important;
+                    backdrop-filter: blur(10px);
+                    padding: 0.8rem 0;
+                }
+        
+                /* Responsive Adjustments */
+                @media (max-width: 991px) {
+                    .navbar-collapse {
+                        background: rgba(26, 35, 126, 0.98);
+                        padding: 1rem;
+                        border-radius: 10px;
+                        margin-top: 1rem;
+                    }
+                    
+                    .nav-link {
+                        padding: 0.8rem 1rem !important;
+                        margin: 0.2rem 0;
+                    }
+                    
+                    .navbar-nav .btn {
+                        margin: 0.5rem 0;
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://static.vecteezy.com/system/resources/previews/043/212/163/non_2x/a-bus-is-seen-driving-down-a-road-that-runs-alongside-a-lush-green-field-a-clean-minimalist-design-for-a-public-transportation-company-free-vector.jpg" alt="SL Transport Logo" class="d-inline-block align-text-top">
+                SL Transport
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="live-tracking.html">Live Tracking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="book-tickets.html">Book Tickets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="routes.html">Routes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="updates.html">Updates</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="support.html">Support</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="login.html" class="btn btn-outline-light me-2">Login</a>
+                    <a href="register.html" class="btn btn-light">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Help & Support</h1>
+            <p class="lead">We're here to help you with any questions or issues</p>
+        </div>
+    </section>
+
+    <!-- Support Options -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card feature-card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-question-circle feature-icon"></i>
+                            <h5 class="card-title">FAQs</h5>
+                            <p class="card-text">Find quick answers to common questions about our services.</p>
+                            <a href="#faqSection" class="btn btn-primary">View FAQs</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-ticket-alt feature-icon"></i>
+                            <h5 class="card-title">Support Ticket</h5>
+                            <p class="card-text">Submit a ticket for technical support or general inquiries.</p>
+                            <a href="#supportForm" class="btn btn-primary">Create Ticket</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-phone feature-icon"></i>
+                            <h5 class="card-title">Contact Us</h5>
+                            <p class="card-text">Get in touch with our support team directly.</p>
+                            <a href="#contactSection" class="btn btn-primary">Contact Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faqSection" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            How do I track my bus in real-time?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Use our Live Tracking feature to see real-time location updates. Simply select your route and view the current position of your bus or train.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            How can I book tickets online?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Visit our Booking section, select your route and preferred time, choose your seats, and complete the payment using our secure payment gateway.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            What payment methods are accepted?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            We accept credit/debit cards, online banking, and mobile wallets for all transactions.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Form -->
+    <section id="supportForm" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Submit a Support Ticket</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Issue Category</label>
+                            <select class="form-select" id="category" required>
+                                <option value="">Select category</option>
+                                <option>Booking Issues</option>
+                                <option>Tracking Problems</option>
+                                <option>Payment Issues</option>
+                                <option>Account Problems</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Ticket</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contactSection" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Contact Information</h2>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <i class="fas fa-phone-alt feature-icon"></i>
+                    <h5>Phone Support</h5>
+                    <p>24/7 Hotline: 1919</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-envelope feature-icon"></i>
+                    <h5>Email Support</h5>
+                    <p>support@sltransport.lk</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-clock feature-icon"></i>
+                    <h5>Support Hours</h5>
+                    <p>24/7 Online Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>Transforming Sri Lanka's public transportation through digital innovation.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-light">Privacy Policy</a></li>
+                        <li><a href="#" class="text-light">Terms of Service</a></li>
+                        <li><a href="#" class="text-light">Contact Us</a></li>
+                        <li><a href="#" class="text-light">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-linkedin fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2025 SL Transport. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('languageSelect').addEventListener('change', function() {
+            const selectedLanguage = this.value;
+            console.log('Language changed to:', selectedLanguage);
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('sticky');
+            } else {
+                navbar.classList.remove('sticky');
+            }
+        });
+    </script>
+</body>
+</html>
